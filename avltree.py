@@ -1,4 +1,4 @@
-from binarytree import * 
+import binarytree
 
 class AVLTree:
 	root = None
@@ -47,3 +47,47 @@ def rotateRight(Tree,avlnode):
       newRoot.rightnode=avlnode
       avlnode.parent=newRoot
       
+
+def calculateBalance(AVLTree):
+    def height(node):
+        if node is None:
+            return 0
+        # altura = 1 + max(altura izquierda, altura derecha)
+        return 1 + max(height(node.leftnode), height(node.rightnode))
+
+    def update_bf(node):
+        if node is None:
+            return
+        # calcular alturas de subárboles
+        left_height = height(node.leftnode)
+        right_height = height(node.rightnode)
+        # asignar balance factor
+        node.bf = left_height - right_height
+        # seguir con los hijos
+        update_bf(node.leftnode)
+        update_bf(node.rightnode)
+
+    update_bf(AVLTree.root)
+
+def reBalance(AVLTree):
+     current=AVLTree.root
+     reBalanceR(current)
+
+
+def reBalanceR(current):
+     if current is None:
+          return
+     if current.bf==-2:
+          rotateLeft(AVLTree,current)
+     elif current.bf==2:
+          rotateRight(AVLTree,current)
+     reBalanceR(current.leftnode)
+     reBalanceR(current.rightnode)
+
+def insert(B,element,key):
+     binarytree.insert(B,element,key)
+     reBalance(B)
+
+def delete(B,element):
+     binarytree.delete(B,element)
+     reBalance(B)

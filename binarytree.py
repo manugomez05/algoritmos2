@@ -48,6 +48,112 @@ def searchR(node, element):
 def search(B, element):
 
   return searchR(B.root, element)
+
+''' Descripción: Elimina un elemento del TAD árbol binario.
+Poscondición: Se debe desvincular el Node a eliminar.
+Salida: Devuelve clave (key) del elemento '''
+def delete(B, element):
+	node = searchNode(B, element)
+	if node == None: return
+	else: return deleteCurrentCase(B, node)
+
+# Valida y ejecuta los distintos casos de delete
+def deleteCurrentCase(B, node):
+	if node.rightnode == None:
+		if node.leftnode == None:
+
+			# Caso 1: El nodo a eliminar es una hoja
+			if node.parent.leftnode != None and node.parent.leftnode == node:
+				node.parent.leftnode = None
+				return node.key
+			elif node.parent.rightnode != None and node.parent.rightnode == node:
+				node.parent.rightnode = None
+				return node.key
+
+		# Caso 2: El nodo a eliminar tiene un hijo del lado izquierdo
+		if node.parent.leftnode != None and node.parent.leftnode == node:
+			node.parent.leftnode = node.leftnode
+			return node.key
+		elif node.parent.rightnode != None and node.parent.rightnode == node:
+			node.parent.rightnode = node.leftnode
+			return node.key
+
+	else:
+		# Caso 2: El nodo a eliminar tiene un hijo del lado derecho
+		if node.leftnode == None:
+			if node.parent.leftnode == node:
+				node.parent.leftnode = node.rightnode
+				return node.key
+			elif node.parent.rightnode == node:
+				node.parent.rightnode = node.rightnode
+				return node.key
+		else:
+			# Caso 3: El nodo a eliminar tiene dos hijos
+			''' # eliminar el menor de sus mayores
+			changeNode = smallerOf(node.rightnode)
+
+			node.value = changeNode.value
+			oldKey = node.key
+			node.key = changeNode.key
+
+			if changeNode.parent.leftnode == changeNode:
+					changeNode.parent.leftnode = None
+			elif changeNode.parent.rightnode == changeNode:
+					changeNode.parent.rightnode = None
+			
+			return oldKey '''
+
+			# o eliminar el mayor de sus menores
+			changeNode = bigger(node.leftnode)
+
+			node.value = changeNode.value
+			oldKey = node.key
+			node.key = changeNode.key
+
+			if changeNode.parent.leftnode == changeNode:
+					changeNode.parent.leftnode = None
+			elif changeNode.parent.rightnode == changeNode:
+					changeNode.parent.rightnode = None
+			
+			return oldKey
+
+# Devuelve el elemento con menor key desde un nodo dado
+def smaller(node):
+	if node.leftnode != None:
+		current = smaller(node.leftnode)
+		if current != None:
+			return current
+	else: return node
+
+# Devuelve el elemento con mayor key desde un nodo dado
+def bigger(node):
+	if node.rightnode != None:
+		current = bigger(node.rightnode)
+		if current != None:
+			return current
+	else: return node
+
+''' def smallerOf(node):
+	if node.leftnode != None:
+		changeNode = smallerOf(node.leftnode)
+		if changeNode != None:
+			return changeNode
+	elif node.rightnode != None:
+		changeNode = smallerOf(node.rightnode)
+		if changeNode != None:
+			return changeNode
+	else: return node '''
+
+''' def biggerOf(node):
+	if node.rightnode != None:
+		changeNode = biggerOf(node.rightnode)
+		if changeNode != None:
+			return changeNode
+	elif node.leftnode != None:
+		changeNode = biggerOf(node.leftnode)
+		if changeNode != None:
+			return changeNode
+	else: return node '''
     
 print(search(B,10))
 def insert(B,element,key):
